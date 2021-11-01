@@ -1,6 +1,4 @@
 import React, { Fragment, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
-import { modalState } from "../atoms/modalAtoms";
 import { Dialog, Transition } from "@headlessui/react";
 import { CameraIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
@@ -13,14 +11,17 @@ import {
   doc,
 } from "@firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
+import { showPostUploadModal } from "../pages/redux/posts/postActions";
+import { useDispatch, useSelector } from "react-redux";
 
 function Modal() {
   const { data: session } = useSession();
   const filePickerRef = useRef(null);
   const captionRef = useRef(null);
-  const [open, setOpen] = useRecoilState(modalState);
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const dispatch = useDispatch();
+  const showModal = useSelector((state) => state.posts.showModal);
 
   const addImageToPost = (e) => {
     const reader = new FileReader();
@@ -60,17 +61,17 @@ function Modal() {
       }
     );
 
-    setOpen(false);
+    dispatch(showPostUploadModal(false));
     setLoading(false);
     setSelectedFile(null);
   };
 
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={showModal} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-y-auto z-10"
-        onClose={setOpen}
+        onClose={() => dispatch(showPostUploadModal(false))}
       >
         <div className="flex items-end justify-center min-h-[800px] sm:max-h-screen pt-4 pb-20 px-4 sm:p-1 sm:block  text-center">
           <Transition.Child

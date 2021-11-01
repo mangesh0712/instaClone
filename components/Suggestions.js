@@ -9,7 +9,6 @@ function Suggestions() {
       ...faker.helpers.contextualCard(),
       id: i,
     }));
-    console.log(suggestions, "s2");
     setSuggestions(suggestions);
   }, []);
   return (

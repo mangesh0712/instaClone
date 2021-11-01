@@ -11,19 +11,14 @@ import {
 import { HomeIcon } from "@heroicons/react/solid";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { modalState } from "../atoms/modalAtoms";
+import { showPostUploadModal } from "../pages/redux/posts/postActions";
+import { useDispatch } from "react-redux";
 
 function Header() {
   const { data: session } = useSession();
+  const dispatch = useDispatch();
   // inbuild next router
   const router = useRouter();
-
-  ///for updating values from atom via global state
-  const [open, setOpen] = useRecoilState(modalState);
-
-  ///for reading values from atom via global state
-  // const open = useRecoilValue(modalState)
 
   return (
     <div className="bg-white shadow-sm z-50 sticky inset-0 ">
@@ -80,7 +75,7 @@ function Header() {
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
               <PlusCircleIcon
-                onClick={() => setOpen(true)}
+                onClick={() => dispatch(showPostUploadModal(true))}
                 className="navBtn"
               />
               <img
