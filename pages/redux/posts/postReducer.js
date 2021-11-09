@@ -1,6 +1,7 @@
 import { POST_ACTION } from "./postActionTypes";
 
 const initialState = {
+  posts: [],
   showModal: false,
 };
 

@@ -13,12 +13,15 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { showPostUploadModal } from "../pages/redux/posts/postActions";
 import { useDispatch } from "react-redux";
+import ProfileDropdown from "./ProfileDropdown";
+import { useVisibility } from "../Hooks/useVisibility";
 
 function Header() {
   const { data: session } = useSession();
   const dispatch = useDispatch();
   // inbuild next router
   const router = useRouter();
+  const [show, toggleShow, close] = useVisibility();
 
   return (
     <div className="bg-white shadow-sm z-50 sticky inset-0 ">
@@ -61,7 +64,7 @@ function Header() {
         </div>
 
         {/* Right  */}
-        <div className="flex items-center space-x-4 justify-end">
+        <div className="flex items-center space-x-4 justify-end relative">
           <HomeIcon onClick={() => router.push("/")} className="navBtn" />
           <MenuIcon className="h-6 md:hidden cursor-pointer" />
           {session ? (
@@ -79,7 +82,8 @@ function Header() {
                 className="navBtn"
               />
               <img
-                onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+                // onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+                onClick={toggleShow}
                 alt="profile pic"
                 src={session?.user?.image}
                 className="h-10 w-10 rounded-full cursor-pointer"
@@ -90,6 +94,13 @@ function Header() {
               Sign In
             </button>
           )}
+          <div
+            className="absolute top-[52px] border-t border-gray-200 -right-10"
+            hidden={!show}
+          >
+            <div className="h-4 w-4 absolute z-0 shadow-md border-t border-gray-200 bg-white rotate-45  -top-2 right-12"></div>
+            <ProfileDropdown />
+          </div>
         </div>
       </div>
     </div>

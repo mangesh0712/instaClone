@@ -7,6 +7,10 @@
     @apply hidden h-6 md:inline-flex cursor-pointer
          hover:scale-125 transition-all duration-150 ease-out;
   }
+  .profileIcon {
+    @apply h-[22px] cursor-pointer
+    hover:scale-125 transition-all duration-150 ease-out;
+  }
   .btn {
     @apply cursor-pointer hover:scale-110 transition-all ease-out duration-150 h-7;
   }

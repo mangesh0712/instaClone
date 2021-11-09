@@ -38,7 +38,6 @@ function Post({ id, img, userName, userImage, caption }) {
         orderBy("timestamp", "desc")
       ),
       (snapshot) => {
-        console.log(snapshot.docs, "comments");
         setComments(snapshot.docs);
       }
     );
@@ -74,7 +73,6 @@ function Post({ id, img, userName, userImage, caption }) {
     }
   };
 
-  console.log(hasLiked, "has");
   /// add comment
   const sendComment = async (e) => {
     e.preventDefault();
@@ -118,7 +116,7 @@ function Post({ id, img, userName, userImage, caption }) {
             ) : (
               <HeartIcon onClick={() => likePost()} className="btn" />
             )}
-            <ChatIcon className="btn" onClick={()=>router.push("/")} />
+            <ChatIcon className="btn" onClick={() => router.push("/")} />
             <PaperAirplaneIcon className="btn" />
           </div>
           <BookmarkIcon className="btn" />
