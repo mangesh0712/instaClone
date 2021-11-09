@@ -1,9 +1,22 @@
-import React from "react";
-import { getProviders, signIn as SignIntoProviders } from "next-auth/react";
+import React, { useEffect } from "react";
+import {
+  getProviders,
+  signIn as SignIntoProviders,
+  useSession,
+} from "next-auth/react";
 import Header from "../../components/Header";
+import { useRouter } from "next/router";
 
 // ...Browser
 function signIn({ providers }) {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+    }
+  }, [session]);
   return (
     <>
       <Header />

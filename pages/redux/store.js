@@ -4,11 +4,12 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import { postsReducer } from "./posts/postReducer";
+import { authReducer } from "./auth/reducer";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: [],
+  whitelist: ["auth"],
 };
 
 // const middlewares = [logger, thunk];
@@ -16,6 +17,7 @@ const middlewares = [logger];
 
 const reducers = combineReducers({
   posts: postsReducer,
+  auth: authReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
