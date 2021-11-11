@@ -6,3 +6,23 @@ export const showPostUploadModal = (val) => {
     payload: val,
   };
 };
+
+export const getStories = (stories) => {
+  return {
+    type: POST_ACTION.GET_STORIES,
+    payload: stories,
+  };
+};
+
+export const setAllPosts = (posts) => {
+  return {
+    type: POST_ACTION.SET_ALL_POSTS,
+    payload: posts,
+  };
+};
+export const setUsersPosts = (posts) => {
+  return {
+    type: POST_ACTION.SET_USERS_POSTS,
+    payload: posts,
+  };
+};

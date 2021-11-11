@@ -4,7 +4,6 @@ import {
   signIn as SignIntoProviders,
   useSession,
 } from "next-auth/react";
-import Header from "../../components/Header";
 import { useRouter } from "next/router";
 
 // ...Browser
@@ -19,25 +18,30 @@ function signIn({ providers }) {
   }, [session]);
   return (
     <>
-      <Header />
-      <div className="flex flex-col justify-center items-center min-h-screen px-14 py-2 -mt-32">
-        <img src="https://links.papareact.com/ocw" alt="img" className="w-80" />
-        <p className="font-xs italic">
-          This is not a REAL app, it is build for educational purposes only
-        </p>
-        <div className="mt-32">
-          {Object.values(providers).map((provider) => (
-            <div key={provider.name}>
-              <button
-                className="p-3 bg-blue-500 rounded-lg text-white"
-                onClick={() =>
-                  SignIntoProviders(provider.id, { callbackUrl: "/" })
-                }
-              >
-                Sign in with {provider.name}
-              </button>
-            </div>
-          ))}
+      <div className="flex flex-col   items-center h-screen px-14 py-2">
+        <div className="flex flex-col rounded-md shadow-sm mt-32 items-center bg-white py-8 px-4">
+          <img
+            src="https://links.papareact.com/ocw"
+            alt="img"
+            className="w-80"
+          />
+          <p className="font-xs italic">
+            This is not a REAL app, it is build for educational purposes only
+          </p>
+          <div className="mt-32">
+            {Object.values(providers).map((provider) => (
+              <div key={provider.name}>
+                <button
+                  className="p-3 bg-blue-500 rounded-lg text-white"
+                  onClick={() =>
+                    SignIntoProviders(provider.id, { callbackUrl: "/" })
+                  }
+                >
+                  Sign in with {provider.name}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

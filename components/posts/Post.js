@@ -20,7 +20,7 @@ import {
 import { HeartIcon as HeartIconFilled } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import Moment from "react-moment";
 import router from "next/router";
 

@@ -1,8 +1,19 @@
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../pages/redux/auth/actions";
 
 function MiniProfile() {
   const { data: session } = useSession();
-  console.log(session, "log session");
+  const dispatch = useDispatch();
+
+  const onSignOut = () => {
+    dispatch(removeUser());
+    signOut({
+      callbackUrl: "http://localhost:3000/auth/signin",
+    });
+  };
+
   return (
     <div className="flex items-center justify-between mt-14 ml-5">
       <img
@@ -16,7 +27,7 @@ function MiniProfile() {
       </div>
       <button
         className="font-semibold text-xs text-blue-400"
-        onClick={() => signOut()}
+        onClick={onSignOut}
       >
         Sign Out
       </button>
