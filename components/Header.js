@@ -29,9 +29,14 @@ function Header() {
       <div className="flex items-center justify-between max-w-6xl xl:mx-auto">
         <div
           onClick={() => router.push("/")}
-          className="hidden lg:inline relative   h-10 w-24 cursor-pointer"
+          className="relative hidden lg:inline-grid h-10 w-24 cursor-pointer"
         >
-          <Image layout="fill" objectFit="contain" src="/images/insta.png" />
+          <Image
+            className="h-24 w-24"
+            layout="fill"
+            objectFit="contain"
+            src="https://links.papareact.com/ocw"
+          />
         </div>
         <div
           onClick={() => router.push("/")}
@@ -81,7 +86,7 @@ function Header() {
                 onClick={toggleShow}
                 alt="profile pic"
                 src={session?.user?.image}
-                className="h-8 w-8 p-[2px] border border-gray-500 rounded-full cursor-pointer"
+                className="h-10 w-10 rounded-full cursor-pointer"
               />
             </>
           ) : (
@@ -90,7 +95,7 @@ function Header() {
             </button>
           )}
           <div
-            className="absolute top-[44px] rounded-md border-t border-gray-200 -right-10"
+            className="absolute top-[52px] border-t border-gray-200 -right-10"
             hidden={!show}
           >
             <div className="h-4 w-4 absolute z-0 shadow-md border-t border-gray-200 bg-white rotate-45  -top-2 right-12"></div>

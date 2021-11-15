@@ -14,4 +14,8 @@
   .btn {
     @apply cursor-pointer hover:scale-110 transition-all ease-out duration-150 h-7;
   }
+
+  .commentInput {
+    @apply absolute  bottom-14 left-1 z-50 rounded-md after:w-4 after:h-4 after:absolute after:z-0 after:-bottom-1 after:left-5 after:rotate-45 after:shadow-lg after:border after:bg-white after:border-gray-200;
+  }
 }

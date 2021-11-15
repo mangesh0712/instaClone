@@ -1,28 +1,36 @@
-import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
-import React, { useEffect } from "react";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "@firebase/firestore";
+import React, { useEffect, useState } from "react";
+import ProfilePost from "../profilePost/ProfilePost";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { db } from "../../firebase";
+import { setUsersPosts } from "../../pages/redux/posts/postActions";
 
 function ProfilePosts() {
-  const posts = useSelector((state) => state.posts.allPosts);
+  const usersUid = useSelector((state) => state.auth.user.uid);
+  const [posts, setPosts] = useState(null);
   const dispatch = useDispatch();
 
-  //   useEffect(() => {
-  //     const unsubscribe = onSnapshot(
-  //       query(
-  //         collection(db, "posts"),
-  //         where("capital", "==", true),
-  //         orderBy("timestamp", "desc")
-  //       ),
-  //       (snapshot) => {
-  //         setPosts(snapshot.docs);
-  //         dispatch(setUsersPosts(snapshot.docs));
-  //       }
-  //     );
-  //     return () => {
-  //       unsubscribe();
-  //     };
-  //   }, [input]);
+  useEffect(() => {
+    if (usersUid) {
+      const unsubscribe = onSnapshot(
+        query(collection(db, "posts"), where("auther", "==", usersUid)),
+        (snapshot) => {
+          setPosts(snapshot.docs);
+          dispatch(setUsersPosts(snapshot.docs));
+        }
+      );
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [db, usersUid]);
 
   return (
     <div>
@@ -36,13 +44,3 @@ function ProfilePosts() {
 }
 
 export default ProfilePosts;
-
-function ProfilePost({ id, img }) {
-  return (
-    <div>
-      <img src={img} alt="p" className="w-78 h-72 object-cover" />
-    </div>
-  );
-}
-
-// export default ProfilePost
