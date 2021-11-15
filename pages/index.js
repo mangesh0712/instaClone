@@ -1,19 +1,24 @@
+import { collection, doc, getDoc, onSnapshot } from "@firebase/firestore";
 import Head from "next/head";
-import Feed from "../components/Feed";
-import Modal from "../components/Modal";
 import { useEffect } from "react";
-import { addUser } from "./redux/auth/actions";
-import { useSession } from "next-auth/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Feed from "../components/Feed";
+import AddPostModal from "../components/AddPostModal";
+import { db } from "../firebase";
+import { addUser } from "../pages/redux/auth/actions";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const uid = useSelector((state) => state.auth.user.uid);
   const dispatch = useDispatch();
-  useEffect(async () => {
-    if (session) {
-      dispatch(addUser(session.user));
-    }
-  }, []);
+
+  // useEffect(async () => {
+  //   // get user by uid from db
+  //   const usersRef = doc(db, "users", uid);
+  //   const userSnap = await getDoc(usersRef);
+  //   console.log(userSnap.data());
+  //   // add user to store
+  //   dispatch(addUser(userSnap.data()));
+  // }, [db]);
   return (
     <div className="bg-gray-50 h-screen scrollbar-hide overflow-y-scroll">
       <Head>
@@ -25,7 +30,7 @@ export default function Home() {
       <Feed />
 
       {/* Modal */}
-      <Modal />
+      <AddPostModal />
     </div>
   );
 }

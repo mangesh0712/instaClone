@@ -17,15 +17,12 @@ export default NextAuth({
   },
   callbacks: {
     async session({ session, token, user }) {
-      // alert("f");
       session.user.username = session.user.name
         .split(" ")
         .join("")
         .toLocaleLowerCase();
       session.user.uid = token.sub;
       session.user.token = token;
-      // alert("f");
-      // console.log(session, "1");
       return session;
     },
     async redirect({ url, baseUrl }) {

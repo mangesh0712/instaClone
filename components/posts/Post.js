@@ -3,11 +3,13 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   setDoc,
+  where,
 } from "@firebase/firestore";
 import {
   BookmarkIcon,
@@ -17,19 +19,30 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/outline";
-import { HeartIcon as HeartIconFilled } from "@heroicons/react/solid";
+import {
+  HeartIcon as HeartIconFilled,
+  BookmarkIcon as BookmarkIconFilled,
+} from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import Moment from "react-moment";
 import router from "next/router";
+import PopUp from "../common/PopUp";
+import EmojiMart from "../common/EmojiMart";
+import { useVisibility } from "../../Hooks/useVisibility";
+import { useSelector } from "react-redux";
 
-function Post({ id, img, userName, userImage, caption }) {
+function Post({ id, img, userName, userImage, caption, usersUid }) {
+  // const usersUid = useSelector((state) => state.auth.user.uid);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
+  const [saved, setSaved] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
+  const [hasSaved, setHasSaved] = useState(false);
   const { data: session } = useSession();
+  const [emojiMart, toggleEmojiMart] = useVisibility();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -54,21 +67,68 @@ function Post({ id, img, userName, userImage, caption }) {
     [db, id]
   );
 
+  useEffect(() => {
+    if (usersUid) {
+      return onSnapshot(
+        collection(db, "users", usersUid, "saved"),
+        (snapshot) => {
+          setSaved(snapshot.docs);
+        }
+      );
+    }
+  }, [db, usersUid]);
+
   useEffect(
     () =>
       setHasLiked(
-        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+        likes.findIndex((like) => like.data().author === usersUid) !== -1
       ),
     [likes]
+  );
+
+  useEffect(
+    () =>
+      setHasSaved(
+        saved.findIndex((savedPost) => savedPost.data().postId === id) !== -1
+      ),
+    [saved, id]
   );
 
   /// Like Post
   const likePost = async () => {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+      const q = query(
+        collection(db, "posts", id, "likes"),
+        where("author", "==", usersUid)
+      );
+      ///find the doc with userssUId
+      const snapShot = await getDocs(q);
+      /// delete the doc with id
+      await deleteDoc(doc(db, "posts", id, "likes", snapShot.docs[0].id));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+      await addDoc(collection(db, "posts", id, "likes"), {
+        timeStamp: serverTimestamp(),
         username: session.user.username,
+        author: usersUid,
+      });
+    }
+  };
+
+  /// Save Post
+  const savePost = async () => {
+    if (hasSaved) {
+      const q = query(
+        collection(db, "users", usersUid, "saved"),
+        where("postId", "==", id)
+      );
+      ///find the doc with postId
+      const snapShot = await getDocs(q);
+      /// delete the doc with id
+      await deleteDoc(doc(db, "users", usersUid, "saved", snapShot.docs[0].id));
+    } else {
+      await addDoc(collection(db, "users", usersUid, "saved"), {
+        postId: id,
+        timeStamp: serverTimestamp(),
       });
     }
   };
@@ -88,8 +148,12 @@ function Post({ id, img, userName, userImage, caption }) {
     });
   };
 
+  const handleEmoji = (emoji) => {
+    setComment(comment + emoji.native);
+  };
+
   return (
-    <div className="my-7 bg-white border border-gray-200 shadow-sm rounded-sm">
+    <div className="my-7 bg-white border border-gray-200 shadow-sm rounded-sm relative">
       {/* Header */}
       <div className="flex items-center p-5">
         <img
@@ -119,7 +183,11 @@ function Post({ id, img, userName, userImage, caption }) {
             <ChatIcon className="btn" onClick={() => router.push("/")} />
             <PaperAirplaneIcon className="btn" />
           </div>
-          <BookmarkIcon className="btn" />
+          {hasSaved ? (
+            <BookmarkIconFilled className="btn text-black" onClick={savePost} />
+          ) : (
+            <BookmarkIcon className="btn" onClick={() => savePost()} />
+          )}
         </div>
       )}
 
@@ -159,7 +227,13 @@ function Post({ id, img, userName, userImage, caption }) {
       {/* In box */}
       {session && (
         <form className="flex items-center p-4">
-          <EmojiHappyIcon className="h-7" />
+          <EmojiHappyIcon className="h-7" onClick={toggleEmojiMart} />
+          {/* {activePostId === postId && emojiMart && ( */}
+          {emojiMart && (
+            <PopUp className="commentInput">
+              <EmojiMart handleEmoji={handleEmoji} />
+            </PopUp>
+          )}
           <input
             value={comment}
             type="text"

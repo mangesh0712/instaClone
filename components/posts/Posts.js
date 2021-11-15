@@ -3,9 +3,10 @@ import Post from "./Post";
 import { db } from "../../firebase";
 import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { setAllPosts } from "../../pages/redux/posts/postActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Posts() {
+  const usersUid = useSelector((state) => state.auth.user.uid);
   const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
 
@@ -32,6 +33,7 @@ function Posts() {
           userImage={post.data().profileImg}
           caption={post.data().caption}
           img={post.data().image}
+          usersUid={usersUid}
         />
       ))}
     </div>

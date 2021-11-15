@@ -17,13 +17,20 @@ const initialState = {
 export const authReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case AUTH_ACTION_TYPES.ADD_USER:
-      return { ...state, user: payload, isAuth: true };
+      return {
+        ...state,
+        user: { ...state.user, userDetails: payload },
+        isAuth: true,
+      };
 
     case AUTH_ACTION_TYPES.REMOVE_USER:
       return { ...state, user: {}, isAuth: false, userAddedToDb: false };
 
     case AUTH_ACTION_TYPES.SET_USER_ADDED_TO_DB:
-      return { ...state, user: {}, userAddedToDb: payload };
+      return { ...state, userAddedToDb: payload };
+
+    case AUTH_ACTION_TYPES.SET_USERS_UID:
+      return { ...state, user: { ...state.user, uid: payload } };
 
     default:
       return state;
