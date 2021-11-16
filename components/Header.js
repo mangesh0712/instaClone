@@ -15,6 +15,7 @@ import { showPostUploadModal } from "../pages/redux/posts/postActions";
 import { useDispatch } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import { useVisibility } from "../Hooks/useVisibility";
+import IconWrapper from "./common/IconWrapper";
 
 function Header() {
   const { data: session } = useSession();
@@ -26,7 +27,7 @@ function Header() {
   return (
     <div className="bg-white shadow-sm z-50 sticky inset-0 ">
       {/* Left  */}
-      <div className="flex items-center justify-between max-w-6xl xl:mx-auto">
+      <div className="flex items-center justify-between sm:max-w-xl md:max-w-[610px] lg:max-w-[920px] mx-auto px-2 sm:px-0">
         <div
           onClick={() => router.push("/")}
           className="relative hidden lg:inline-grid h-10 w-24 cursor-pointer"
@@ -65,22 +66,34 @@ function Header() {
 
         {/* Right  */}
         <div className="flex items-center space-x-4 justify-end relative">
-          <HomeIcon onClick={() => router.push("/")} className="navBtn" />
+          <IconWrapper path="/" label="Home" showTootlip={false}>
+            <HomeIcon className="navBtn" />
+          </IconWrapper>
           <MenuIcon className="h-6 md:hidden cursor-pointer" />
           {session ? (
             <>
-              <div className="navBtn relative">
-                <PaperAirplaneIcon className="navBtn rotate-45 z-50" />
-                <div className="absolute text-xs -top-1 -right-2 bg-red-400 rounded-full animate-bounce w-5 h-5 flex items-center  justify-center text-white">
-                  3
-                </div>
-              </div>
-              <UserGroupIcon className="navBtn" />
-              <HeartIcon className="navBtn" />
+              <IconWrapper
+                path="/profile"
+                label=""
+                showTootlip={false}
+                notifications={true}
+              >
+                <PaperAirplaneIcon className="navBtn rotate-45" />
+              </IconWrapper>
+
+              <IconWrapper path="/u" label="" showTootlip={false}>
+                <UserGroupIcon className="navBtn" />
+              </IconWrapper>
+
+              <IconWrapper path="/h" label="" showTootlip={false}>
+                <HeartIcon className="navBtn" />
+              </IconWrapper>
+
               <PlusCircleIcon
                 onClick={() => dispatch(showPostUploadModal(true))}
                 className="navBtn"
               />
+
               <img
                 // onClick={() => signOut({ callbackUrl: "/auth/signin" })}
                 onClick={toggleShow}
