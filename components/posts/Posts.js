@@ -4,6 +4,7 @@ import { db } from "../../firebase";
 import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { setAllPosts } from "../../pages/redux/posts/postActions";
 import { useDispatch, useSelector } from "react-redux";
+import PostCardSkeleton from "./skeleton/PostCardSkeleton";
 
 function Posts() {
   const usersUid = useSelector((state) => state.auth.user.uid);
@@ -25,17 +26,25 @@ function Posts() {
 
   return (
     <div className="">
-      {posts.map((post) => (
-        <Post
-          key={post.id}
-          id={post.id}
-          userName={post.data().userName}
-          userImage={post.data().profileImg}
-          caption={post.data().caption}
-          img={post.data().image}
-          usersUid={usersUid}
-        />
-      ))}
+      {!posts.length ? (
+        <div className="postContainer">
+          <PostCardSkeleton />
+        </div>
+      ) : (
+        <>
+          {posts.map((post) => (
+            <Post
+              key={post.id}
+              id={post.id}
+              userName={post.data().userName}
+              userImage={post.data().profileImg}
+              caption={post.data().caption}
+              img={post.data().image}
+              usersUid={usersUid}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 }

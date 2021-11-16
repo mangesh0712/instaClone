@@ -8,7 +8,6 @@ import {
   orderBy,
   query,
   serverTimestamp,
-  setDoc,
   where,
 } from "@firebase/firestore";
 import {
@@ -31,8 +30,7 @@ import router from "next/router";
 import PopUp from "../common/PopUp";
 import EmojiMart from "../common/EmojiMart";
 import { useVisibility } from "../../Hooks/useVisibility";
-import { useSelector } from "react-redux";
-
+import PostHead from "./PostHead";
 function Post({ id, img, userName, userImage, caption, usersUid }) {
   // const usersUid = useSelector((state) => state.auth.user.uid);
   const [comment, setComment] = useState("");
@@ -153,20 +151,20 @@ function Post({ id, img, userName, userImage, caption, usersUid }) {
   };
 
   return (
-    <div className="my-7 bg-white border border-gray-200 shadow-sm rounded-sm relative">
+    <div className="postContainer relative">
       {/* Header */}
-      <div className="flex items-center p-5">
-        <img
-          src={userImage}
-          alt="imge"
-          className="h-10 object-cover rounded-full w-10 border mr-3 p-[1.5px]"
-        />
-        <p className="flex-grow font-bold">{userName}</p>
-        <DotsHorizontalIcon className="h-5" />
-      </div>
+      <PostHead
+        userImage={userImage}
+        userName={userName}
+        Icon={DotsHorizontalIcon}
+      />
 
       {/* Img */}
-      <img src={img} className="object-cover w-full" alt="" />
+      <img
+        src={img}
+        className="h-[680px] w-[611px] sm:h-[680px] sm:w-[611px] object-cover"
+        alt=""
+      />
 
       {/* buttons */}
       {session && (
@@ -226,30 +224,33 @@ function Post({ id, img, userName, userImage, caption, usersUid }) {
 
       {/* In box */}
       {session && (
-        <form className="flex items-center p-4">
-          <EmojiHappyIcon className="h-7" onClick={toggleEmojiMart} />
-          {/* {activePostId === postId && emojiMart && ( */}
-          {emojiMart && (
-            <PopUp className="commentInput">
-              <EmojiMart handleEmoji={handleEmoji} />
-            </PopUp>
-          )}
-          <input
-            value={comment}
-            type="text"
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Add a comment ..."
-            className="border-none focus:ring-0 outline-none flex-1"
-          />
-          <button
-            type="submit"
-            disabled={!comment.trim()}
-            onClick={sendComment}
-            className="font-semibold text-blue-400"
-          >
-            Post
-          </button>
-        </form>
+        <>
+          <hr className="g" />
+          <form className="flex items-center px-4 py-2">
+            <EmojiHappyIcon className="h-6" onClick={toggleEmojiMart} />
+            {/* {activePostId === postId && emojiMart && ( */}
+            {emojiMart && (
+              <PopUp className="commentInput">
+                <EmojiMart handleEmoji={handleEmoji} />
+              </PopUp>
+            )}
+            <input
+              value={comment}
+              type="text"
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Add a comment ..."
+              className="border-none focus:ring-0 text-sm outline-none flex-1"
+            />
+            <button
+              type="submit"
+              disabled={!comment.trim()}
+              onClick={sendComment}
+              className="font-semibold text-sm text-blue-400 disabled:opacity-60"
+            >
+              Post
+            </button>
+          </form>
+        </>
       )}
     </div>
   );

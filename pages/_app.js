@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "react-loading-skeleton/dist/skeleton.css";
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
