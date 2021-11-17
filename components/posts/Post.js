@@ -32,7 +32,17 @@ import PopUp from "../common/PopUp";
 import EmojiMart from "../common/EmojiMart";
 import { useVisibility } from "../../Hooks/useVisibility";
 import PostHead from "./PostHead";
-function Post({ id, img, userName, userImage, caption, usersUid, ownPost }) {
+
+function Post({
+  id,
+  img,
+  userName,
+  userImage,
+  caption,
+  usersUid,
+  ownPost,
+  author,
+}) {
   // const usersUid = useSelector((state) => state.auth.user.uid);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -153,6 +163,14 @@ function Post({ id, img, userName, userImage, caption, usersUid, ownPost }) {
 
   const handleChangeProfilePic = async (img_url) => {
     await updateDoc(doc(db, "users", usersUid), "userImage", img_url);
+    // / pp updated users posts
+    const posts = await getDocs(
+      query(collection(db, "posts"), where("auther", "==", author))
+    );
+
+    posts.docs.map(async (post) => {
+      await updateDoc(doc(db, "posts", post.id), "profileImg", img_url);
+    });
   };
 
   return (

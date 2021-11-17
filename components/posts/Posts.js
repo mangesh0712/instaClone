@@ -41,6 +41,7 @@ function Posts() {
               caption={post.data().caption}
               img={post.data().image}
               usersUid={usersUid}
+              author={post.data().auther}
               ownPost={post.data().auther === usersUid ? true : false}
             />
           ))}
