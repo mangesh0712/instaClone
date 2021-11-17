@@ -1,7 +1,7 @@
 function ProfilePost({ id, img }) {
   return (
     <div>
-      <img src={img} alt="p" className="w-78 h-72 object-cover" />
+      <img src={img} alt="p" className=" lg:w-78 lg:h-72 object-cover" />
     </div>
   );
 }

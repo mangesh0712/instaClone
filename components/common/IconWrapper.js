@@ -20,7 +20,7 @@ function IconWrapper({ children, path, label, showTootlip, notifications }) {
       {children}
       {hoverState && showTootlip && <ToolTip label={label} left="" top="" />}
       {notifications && (
-        <div className="absolute text-xs -top-1 -right-2 bg-red-400 rounded-full animate-bounce w-5 h-5 flex items-center  justify-center text-white">
+        <div className="hidden absolute text-xs -top-1 -right-2 bg-red-400 rounded-full animate-bounce w-5 h-5 md:flex items-center  justify-center text-white">
           3
         </div>
       )}

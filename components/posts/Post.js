@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "@firebase/firestore";
 import {
@@ -31,7 +32,7 @@ import PopUp from "../common/PopUp";
 import EmojiMart from "../common/EmojiMart";
 import { useVisibility } from "../../Hooks/useVisibility";
 import PostHead from "./PostHead";
-function Post({ id, img, userName, userImage, caption, usersUid }) {
+function Post({ id, img, userName, userImage, caption, usersUid, ownPost }) {
   // const usersUid = useSelector((state) => state.auth.user.uid);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -150,6 +151,10 @@ function Post({ id, img, userName, userImage, caption, usersUid }) {
     setComment(comment + emoji.native);
   };
 
+  const handleChangeProfilePic = async (img_url) => {
+    await updateDoc(doc(db, "users", usersUid), "userImage", img_url);
+  };
+
   return (
     <div className="postContainer relative">
       {/* Header */}
@@ -157,6 +162,9 @@ function Post({ id, img, userName, userImage, caption, usersUid }) {
         userImage={userImage}
         userName={userName}
         Icon={DotsHorizontalIcon}
+        ownPost={ownPost}
+        handleChangeProfilePic={handleChangeProfilePic}
+        image={img}
       />
 
       {/* Img */}
@@ -245,8 +253,7 @@ function Post({ id, img, userName, userImage, caption, usersUid }) {
               type="submit"
               disabled={!comment.trim()}
               onClick={sendComment}
-              className="font-semibold text-sm text-blue-400 disabled:opacity-60"
-            >
+              className="font-semibold text-sm text-blue-400 disabled:opacity-60">
               Post
             </button>
           </form>

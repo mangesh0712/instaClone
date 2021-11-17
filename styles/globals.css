@@ -24,4 +24,10 @@
   .storyContainer {
     @apply flex mx-2 md:mx-0 p-6 bg-white mt-8 border border-gray-200 rounded-sm space-x-4;
   }
+  .modalContainer {
+    @apply inline-block  overflow-hidden text-left align-bottom sm:align-middle transition-all transform bg-white shadow-xl rounded-lg sm:max-w-sm sm:w-full;
+  }
+  .modalItemContainer {
+    @apply border-b border-gray-300 text-center py-3 text-sm cursor-pointer;
+  }
 }

@@ -19,7 +19,7 @@ export const authReducer = (state = initialState, { type, payload }) => {
     case AUTH_ACTION_TYPES.ADD_USER:
       return {
         ...state,
-        user: { ...state.user, userDetails: payload },
+        user: { ...state.user, ...payload },
         isAuth: true,
       };
 
