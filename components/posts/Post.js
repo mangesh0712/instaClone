@@ -161,7 +161,7 @@ function Post({
     setComment(comment + emoji.native);
   };
 
-  const handleChangeProfilePic = async (img_url) => {
+  const changeProfilePic = async (img_url) => {
     await updateDoc(doc(db, "users", usersUid), "userImage", img_url);
     // / pp updated users posts
     const posts = await getDocs(
@@ -173,6 +173,10 @@ function Post({
     });
   };
 
+  const DeletePost = async (id) => {
+    await deleteDoc(doc(db, "posts", id));
+  };
+
   return (
     <div className="postContainer relative">
       {/* Header */}
@@ -181,8 +185,10 @@ function Post({
         userName={userName}
         Icon={DotsHorizontalIcon}
         ownPost={ownPost}
-        handleChangeProfilePic={handleChangeProfilePic}
+        changeProfilePic={changeProfilePic}
+        DeletePost={DeletePost}
         image={img}
+        postId={id}
       />
 
       {/* Img */}

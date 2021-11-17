@@ -8,7 +8,9 @@ function PostHead({
   Icon,
   ownPost,
   image,
-  handleChangeProfilePic,
+  changeProfilePic,
+  DeletePost,
+  postId,
 }) {
   const [show, toggle, close, open] = useVisibility();
 
@@ -31,9 +33,12 @@ function PostHead({
       <PostModal
         showModal={show}
         onClose={close}
+        toggleModal1={toggle}
         ownPost={ownPost}
-        handleChangeProfilePic={handleChangeProfilePic}
+        changeProfilePic={changeProfilePic}
+        DeletePost={DeletePost}
         image={image}
+        postId={postId}
       />
     </>
   );
