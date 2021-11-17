@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import faker from "faker";
-import SuggestedProfiles from "./SuggestedProfiles";
+import SuggestedProfiles from "../SuggestedProfiles";
 
 function Suggestions() {
   const [suggestions, setSuggestions] = useState([]);
@@ -12,9 +12,9 @@ function Suggestions() {
     setSuggestions(suggestions);
   }, []);
   return (
-    <div className="mt-4 ml-10">
+    <div className="mt-4 ml-7">
       <div className="flex justify-between  items-center mb-5">
-        <button className="font-bold text-sm text-gray-400"> 
+        <button className="font-bold text-sm text-gray-400">
           Seggestions For You
         </button>
         <span className="text-xs font-semibold">See All</span>

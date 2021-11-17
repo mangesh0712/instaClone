@@ -1,17 +1,45 @@
 import React from "react";
+import { useVisibility } from "../../Hooks/useVisibility";
+import PostModal from "./PostModal";
 
-function PostHead({ userImage, userName, Icon }) {
+function PostHead({
+  userImage,
+  userName,
+  Icon,
+  ownPost,
+  image,
+  changeProfilePic,
+  DeletePost,
+  postId,
+}) {
+  const [show, toggle, close, open] = useVisibility();
+
   return (
     <>
       <div className="flex items-center px-5 py-3">
         <img
           src={userImage}
           alt="imge"
-          className="h-8 object-cover rounded-full w-8 border mr-3 p-[1.5px]"
+          className="h-8 object-cover hover:cursor-pointer rounded-full w-8 border mr-3 p-[1.5px]"
         />
-        <p className="flex-grow  text-sm font-semibold">{userName}</p>
-        <Icon className="h-5 cursor-pointer" />
+        <div className="flex-grow flex">
+          <div className="text-sm font-semibold cursor-pointer hover:underline">
+            {userName}
+          </div>
+          <div className="flex-grow" />
+        </div>
+        <Icon className="h-5 cursor-pointer" onClick={open} />
       </div>
+      <PostModal
+        showModal={show}
+        onClose={close}
+        toggleModal1={toggle}
+        ownPost={ownPost}
+        changeProfilePic={changeProfilePic}
+        DeletePost={DeletePost}
+        image={image}
+        postId={postId}
+      />
     </>
   );
 }

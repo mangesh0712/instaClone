@@ -5,6 +5,7 @@ import { storySize } from "../../constants";
 import Story from "../common/Story";
 import ProfilePosts from "../common/ProfilePosts";
 import Details from "./Details";
+import Footer from "../common/Footer";
 
 function ProfileDetails() {
   const stories = useSelector((state) => state.posts.stories);
@@ -38,9 +39,15 @@ function ProfileDetails() {
           ))}
       </div>
 
-      <hr className="mt-6 mb-8"></hr>
+      <hr className="mt-6 mb-8 text"></hr>
       {/* posts */}
       <ProfilePosts />
+      {/* Footer */}
+      <Footer
+        containerClass="ml-7 mt-8  w-full text-gray-400 opacity-70"
+        itemClass="cursor-pointer flex flex-wrap justify-center space-x-3 text-sm"
+        bottomClass="text-xs mt-2 font-mono flex justify-center"
+      />
     </div>
   );
 }

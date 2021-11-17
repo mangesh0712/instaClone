@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog } from "@headlessui/react";
 import { CameraIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
 import { db, storage } from "../firebase";
@@ -75,7 +75,7 @@ function UploadPostModal() {
 
   return (
     <Modal showModal={showModal} onClose={onClose} bgColor="bg-black">
-      <div className="inline-block  pt5 pb-4  sm:my-8 overflow-hidden text-left align-bottom sm:align-middle transition-all transform bg-white shadow-xl rounded-lg sm:p-6 sm:max-w-sm sm:w-full">
+      <div className="modalContainer  pt-5 pb-4  sm:my-8 sm:p-6 ">
         <div className="">
           {selectedFile ? (
             <img

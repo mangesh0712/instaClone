@@ -21,7 +21,7 @@ function ProfileDropdown() {
 
   return (
     <div className="relative  z-50 h-[203px] w-60 bg-white rounded-md shadow-md">
-      <div className="flex flex-col justify-center text-gray-600">
+      <div className="flex flex-col justify-center text-gray-800">
         <ProfIcon title="Profile" Icon={UserCircleIcon} path="profile" />
         <ProfIcon title="Saved" Icon={BookmarkIcon} />
         <ProfIcon title="Settings" Icon={CogIcon} />
@@ -29,8 +29,7 @@ function ProfileDropdown() {
         <span className=" border-b-2 border-gray-300"></span>
         <div
           onClick={onSignOut}
-          className="flex items-center py-2 px-3 cursor-pointer hover:bg-gray-50"
-        >
+          className="flex items-center py-2 px-3 cursor-pointer hover:bg-gray-50">
           <p className="ml-3">Log Out</p>
         </div>
       </div>

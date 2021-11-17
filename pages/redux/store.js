@@ -9,7 +9,7 @@ import { authReducer } from "./auth/reducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "posts"],
+  // whitelist: ["auth", "posts"],
 };
 
 // const middlewares = [logger, thunk];

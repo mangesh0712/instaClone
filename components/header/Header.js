@@ -8,14 +8,15 @@ import {
   PlusCircleIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/outline";
+import Skeleton from "react-loading-skeleton";
 import { HomeIcon } from "@heroicons/react/solid";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { showPostUploadModal } from "../pages/redux/posts/postActions";
-import { useDispatch } from "react-redux";
-import ProfileDropdown from "./ProfileDropdown";
-import { useVisibility } from "../Hooks/useVisibility";
-import IconWrapper from "./common/IconWrapper";
+import { showPostUploadModal } from "../../pages/redux/posts/postActions";
+import { useDispatch, useSelector } from "react-redux";
+import ProfileDropdown from "../ProfileDropdown";
+import { useVisibility } from "../../Hooks/useVisibility";
+import IconWrapper from "../common/IconWrapper";
 
 function Header() {
   const { data: session } = useSession();
@@ -23,15 +24,15 @@ function Header() {
   // inbuild next router
   const router = useRouter();
   const [show, toggleShow, close] = useVisibility();
+  const userImage = useSelector((state) => state.auth.user.userImage);
 
   return (
-    <div className="bg-white shadow-sm z-50 sticky inset-0 ">
+    <div className="bg-white shadow-sm z-10 sticky inset-0 ">
       {/* Left  */}
       <div className="flex items-center justify-between sm:max-w-xl md:max-w-[610px] lg:max-w-[920px] mx-auto px-2 sm:px-0">
         <div
           onClick={() => router.push("/")}
-          className="relative hidden lg:inline-grid h-10 w-24 cursor-pointer"
-        >
+          className="relative hidden lg:inline-grid h-10 w-24 cursor-pointer">
           <Image
             className="h-24 w-24"
             layout="fill"
@@ -41,8 +42,7 @@ function Header() {
         </div>
         <div
           onClick={() => router.push("/")}
-          className="relative w-10 h-10  lg:hidden flex-shrink-0 cursor-pointer"
-        >
+          className="relative w-10 h-10  lg:hidden flex-shrink-0 cursor-pointer">
           <Image
             layout="fill"
             objectFit="contain"
@@ -65,7 +65,7 @@ function Header() {
         </div>
 
         {/* Right  */}
-        <div className="flex items-center space-x-4 justify-end relative">
+        <div className="flex items-center space-x-1 md:space-x-4 justify-end relative">
           <IconWrapper path="/" label="Home" showTootlip={false}>
             <HomeIcon className="navBtn" />
           </IconWrapper>
@@ -76,8 +76,7 @@ function Header() {
                 path="/profile"
                 label=""
                 showTootlip={false}
-                notifications={true}
-              >
+                notifications={true}>
                 <PaperAirplaneIcon className="navBtn rotate-45" />
               </IconWrapper>
 
@@ -93,14 +92,17 @@ function Header() {
                 onClick={() => dispatch(showPostUploadModal(true))}
                 className="navBtn"
               />
-
-              <img
-                // onClick={() => signOut({ callbackUrl: "/auth/signin" })}
-                onClick={toggleShow}
-                alt="profile pic"
-                src={session?.user?.image}
-                className="h-10 w-10 rounded-full cursor-pointer"
-              />
+              {!userImage ? (
+                <Skeleton height={40} width={40} circle={true} />
+              ) : (
+                <img
+                  // onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+                  onClick={toggleShow}
+                  alt="profile pic"
+                  src={userImage}
+                  className="h-10 w-10 rounded-full cursor-pointer"
+                />
+              )}
             </>
           ) : (
             <button className="f" onClick={signIn}>
@@ -109,8 +111,7 @@ function Header() {
           )}
           <div
             className="absolute top-[52px] border-t border-gray-200 -right-10"
-            hidden={!show}
-          >
+            hidden={!show}>
             <div className="h-4 w-4 absolute z-0 shadow-md border-t border-gray-200 bg-white rotate-45  -top-2 right-12"></div>
             <ProfileDropdown />
           </div>
