@@ -76,7 +76,7 @@ function Layout({ children }) {
   }, [db, session]);
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-[#F8F8F8]">
       {session && <Header />}
       {children}
     </div>

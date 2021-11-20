@@ -27,7 +27,7 @@ function Header() {
   const userImage = useSelector((state) => state.auth.user.userImage);
 
   return (
-    <div className="bg-white shadow-sm z-10 sticky inset-0 ">
+    <div className="bg-white border-b border-gray-300  z-10 sticky inset-0 ">
       {/* Left  */}
       <div className="flex items-center justify-between sm:max-w-xl md:max-w-[610px] lg:max-w-[920px] mx-auto px-2 sm:px-0">
         <div
@@ -110,9 +110,9 @@ function Header() {
             </button>
           )}
           <div
-            className="absolute top-[52px] border-t border-gray-200 -right-10"
+            className="absolute top-[52px] shadow rounded-md  border-gray-100 -right-10"
             hidden={!show}>
-            <div className="h-4 w-4 absolute z-0 shadow-md border-t border-gray-200 bg-white rotate-45  -top-2 right-12"></div>
+            <div className="h-4 w-4 absolute z-0 shadow border-t border-gray-200 bg-white rotate-45  -top-2 right-12"></div>
             <ProfileDropdown />
           </div>
         </div>

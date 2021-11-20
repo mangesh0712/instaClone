@@ -21,7 +21,7 @@ function Stories({ userDetails }) {
 
   return (
     <>
-      {!stories.length ? (
+      {!userDetails.userImage ? (
         <StoriesSkeleton />
       ) : (
         <div className="storyContainer overflow-x-scroll scrollbar-thin  scrollbar-thumb-gray-900 scrollbar-track-gray-100">

@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, onSnapshot } from "@firebase/firestore";
 import Head from "next/head";
 import Feed from "../components/feed/Feed";
-import AddPostModal from "../components/AddPostModal";
+import AddPostModal from "../components/posts/AddPostModal";
 
 export default function Home() {
   return (

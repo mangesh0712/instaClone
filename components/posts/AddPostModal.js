@@ -1,8 +1,8 @@
 import React, { Fragment, useRef, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { CameraIcon } from "@heroicons/react/outline";
+import { CameraIcon, EmojiHappyIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
-import { db, storage } from "../firebase";
+import { db, storage } from "../../firebase";
 import {
   serverTimestamp,
   addDoc,
@@ -11,9 +11,13 @@ import {
   doc,
 } from "@firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
-import { showPostUploadModal } from "../pages/redux/posts/postActions";
+import { showPostUploadModal } from "../../pages/redux/posts/postActions";
 import { useDispatch, useSelector } from "react-redux";
-import Modal from "./common/Modal";
+import Modal from "../common/Modal";
+import { useVisibility } from "../../Hooks/useVisibility";
+import PopUp from "../common/PopUp";
+import EmojiMart from "../common/EmojiMart";
+// import SearchLocationInput from "./common/SearchLocattionInput";
 
 function UploadPostModal() {
   const { data: session } = useSession();
@@ -24,6 +28,8 @@ function UploadPostModal() {
   const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.posts.showModal);
+  const userImage = useSelector((state) => state.auth.user.userImage);
+  const [emojiMart, toggleEmojiMart] = useVisibility();
 
   const addImageToPost = (e) => {
     const reader = new FileReader();
@@ -43,7 +49,7 @@ function UploadPostModal() {
     const docRef = await addDoc(collection(db, "posts"), {
       userName: session.user.username,
       caption: captionRef.current.value,
-      profileImg: session.user.image,
+      profileImg: userImage,
       timestamp: serverTimestamp(),
       auther: uid,
     });
@@ -73,32 +79,34 @@ function UploadPostModal() {
     dispatch(showPostUploadModal(val));
   };
 
-  return (
-    <Modal showModal={showModal} onClose={onClose} bgColor="bg-black">
-      <div className="modalContainer  pt-5 pb-4  sm:my-8 sm:p-6 ">
-        <div className="">
-          {selectedFile ? (
-            <img
-              src={selectedFile}
-              alt=""
-              className=" mx-auto object-contain h-44 w-full"
-              onClick={() => setSelectedFile(null)}
-            />
-          ) : (
-            <div
-              className="flex justify-center items-center mx-auto w-16 h-16 bg-red-100 rounded-full cursor-pointer"
-              onClick={() => filePickerRef.current.click()}
-            >
-              <CameraIcon className="h-6 w-6 text-red-600" />
-            </div>
-          )}
+  const handleEmoji = (val) => {
+    alert(val);
+  };
 
-          <div>
+  return (
+    <div className="relative">
+      <Modal showModal={showModal} onClose={onClose} bgColor="bg-black">
+        <div className="modalContainer relative z-20  pt-5 pb-4  sm:my-8 sm:p-6 ">
+          <div className="">
+            {selectedFile ? (
+              <img
+                src={selectedFile}
+                alt=""
+                className=" mx-auto object-contain h-44 w-full"
+                onClick={() => setSelectedFile(null)}
+              />
+            ) : (
+              <div
+                className="flex justify-center items-center mx-auto w-16 h-16 bg-red-100 rounded-full cursor-pointer"
+                onClick={() => filePickerRef.current.click()}>
+                <CameraIcon className="h-6 w-6 text-red-600" />
+              </div>
+            )}
+
             <div className="mt-3 text-center sm:mt-6">
               <Dialog.Title as="h3" className="text-lg leading-6 font-medium">
                 Upload a photo
               </Dialog.Title>
-
               <div className="f">
                 <input
                   type="file"
@@ -107,29 +115,43 @@ function UploadPostModal() {
                   onChange={addImageToPost}
                 />
               </div>
-
-              <div className="mt-2">
-                <input
-                  ref={captionRef}
-                  type="text"
-                  className="border-none focus:ring-0 w-full text-center"
-                  placeholder="Please enter a caption..."
-                />
+              <div className="flex">
+                <div className="mt-2  w-11/12 relative">
+                  <textarea
+                    ref={captionRef}
+                    rows="3"
+                    className="border-none focus:ring-0 w-full text-center scrollbar-hide"
+                    placeholder="Please enter a caption..."></textarea>
+                </div>
+                <div className="mt-2 w-1/12 r">
+                  <EmojiHappyIcon
+                    className="h-6"
+                    onClick={(e) => {
+                      toggleEmojiMart(e);
+                    }}
+                  />
+                  {/* 
+                  {emojiMart && (
+                    <PopUp className="commentInput absolute z-50">
+                      <EmojiMart handleEmoji={handleEmoji} />
+                    </PopUp>
+                  )} */}
+                </div>
               </div>
+              {/* <SearchLocationInput />; */}
             </div>
           </div>
           <div className="mt-5 mx-3 sm:mx-0 sm:mt-6">
             <button
               disabled={!selectedFile}
-              className="inline-flex justify-center bg-red-600 px-4 py-2 text-base font-medium w-full rounded-md text-white shadow-sm border-transparent border focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-red-500 sm:text-sm disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-gray-300"
-              onClick={uploadPost}
-            >
+              className="modalActionButton"
+              onClick={uploadPost}>
               {!loading ? " Upload Post" : "Uploading..."}
             </button>
           </div>
         </div>
-      </div>
-    </Modal>
+      </Modal>
+    </div>
   );
 }
 

@@ -1,13 +1,14 @@
 import React from "react";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 
 function StoriesSkeleton() {
+  const n = 10;
   return (
-    <SkeletonTheme width={676} color="#dadada" highlightColor="#f3efef">
-      <div className="storyContainer">
-        <Skeleton circle={true} height={64} width={64} />
-      </div>
-    </SkeletonTheme>
+    <div className="storyContainer overflow-x-scroll scrollbar-thin  scrollbar-thumb-gray-900 scrollbar-track-gray-100">
+      {[...Array(n)].map((elementInArray, index) => (
+        <Skeleton circle={true} height={64} width={64} key={index} />
+      ))}
+    </div>
   );
 }
 

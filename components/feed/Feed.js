@@ -24,7 +24,11 @@ function Feed() {
         <section className="hidden lg:inline-grid md:col-span-1">
           <div className="fixed top-20">
             {/* mini profile */}
-            <MiniProfile userDetails={user} />
+            <MiniProfile
+              userDetails={user}
+              showLogOut={true}
+              containerClass="mt-11 ml-7"
+            />
             {/* suggestions  */}
             <Suggestions />
             {/* FOOTER */}

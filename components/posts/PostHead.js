@@ -9,8 +9,11 @@ function PostHead({
   ownPost,
   image,
   changeProfilePic,
-  DeletePost,
+  deletePost,
+  caption,
+  updatePost,
   postId,
+  setAcivatedPostId,
 }) {
   const [show, toggle, close, open] = useVisibility();
 
@@ -36,9 +39,16 @@ function PostHead({
         toggleModal1={toggle}
         ownPost={ownPost}
         changeProfilePic={changeProfilePic}
-        DeletePost={DeletePost}
+        deletePost={deletePost}
+        updatePost={updatePost}
         image={image}
+        setAcivatedPostId={setAcivatedPostId}
+        caption={caption}
         postId={postId}
+        userDetails={{
+          username: userName,
+          userImage,
+        }}
       />
     </>
   );
