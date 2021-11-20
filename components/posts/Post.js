@@ -32,6 +32,8 @@ import PopUp from "../common/PopUp";
 import EmojiMart from "../common/EmojiMart";
 import { useVisibility } from "../../Hooks/useVisibility";
 import PostHead from "./PostHead";
+import { addUser } from "../../pages/redux/auth/actions";
+import { useDispatch } from "react-redux";
 
 function Post({
   id,
@@ -42,6 +44,8 @@ function Post({
   usersUid,
   ownPost,
   author,
+  acivatedPostId,
+  setAcivatedPostId,
 }) {
   // const usersUid = useSelector((state) => state.auth.user.uid);
   const [comment, setComment] = useState("");
@@ -52,6 +56,7 @@ function Post({
   const [hasSaved, setHasSaved] = useState(false);
   const { data: session } = useSession();
   const [emojiMart, toggleEmojiMart] = useVisibility();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -168,13 +173,19 @@ function Post({
       query(collection(db, "posts"), where("auther", "==", author))
     );
 
+    // TODO: add promise all here
     posts.docs.map(async (post) => {
       await updateDoc(doc(db, "posts", post.id), "profileImg", img_url);
     });
+    dispatch(addUser({ userImage: img_url }));
   };
 
-  const DeletePost = async (id) => {
-    await deleteDoc(doc(db, "posts", id));
+  const deletePost = async (postId) => {
+    await deleteDoc(doc(db, "posts", postId));
+  };
+
+  const updatePost = async (postId, updatedObject) => {
+    await updateDoc(doc(db, "posts", postId), updatedObject);
   };
 
   return (
@@ -186,9 +197,12 @@ function Post({
         Icon={DotsHorizontalIcon}
         ownPost={ownPost}
         changeProfilePic={changeProfilePic}
-        DeletePost={DeletePost}
+        deletePost={deletePost}
+        updatePost={updatePost}
         image={img}
         postId={id}
+        setAcivatedPostId={setAcivatedPostId}
+        caption={caption}
       />
 
       {/* Img */}
@@ -259,12 +273,21 @@ function Post({
         <>
           <hr className="g" />
           <form className="flex items-center px-4 py-2">
-            <EmojiHappyIcon className="h-6" onClick={toggleEmojiMart} />
-            {/* {activePostId === postId && emojiMart && ( */}
-            {emojiMart && (
-              <PopUp className="commentInput">
-                <EmojiMart handleEmoji={handleEmoji} />
-              </PopUp>
+            <EmojiHappyIcon
+              className="h-6"
+              onClick={(e) => {
+                toggleEmojiMart(e);
+                setAcivatedPostId(id);
+              }}
+            />
+
+            {acivatedPostId === id && emojiMart && (
+              <>
+                <PopUp className="commentInput shadow bottom-12 left-1 z-20 bg-white">
+                  <div className="w-4 h-4 absolute z-0 bg-white bottom-[-8px] left-5 rotate-45  border-r border-b border-gray-300"></div>
+                  <EmojiMart handleEmoji={handleEmoji} />
+                </PopUp>
+              </>
             )}
             <input
               value={comment}

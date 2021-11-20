@@ -20,7 +20,7 @@ function ProfileDropdown() {
   };
 
   return (
-    <div className="relative  z-50 h-[203px] w-60 bg-white rounded-md shadow-md">
+    <div className="relative  z-50 h-[203px] w-60 bg-white rounded-md shadow">
       <div className="flex flex-col justify-center text-gray-800">
         <ProfIcon title="Profile" Icon={UserCircleIcon} path="profile" />
         <ProfIcon title="Saved" Icon={BookmarkIcon} />

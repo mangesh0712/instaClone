@@ -2,18 +2,24 @@ import React from "react";
 import Modal from "../common/Modal";
 import { useVisibility } from "../../Hooks/useVisibility";
 import { Dialog } from "@headlessui/react";
+import EditPostModal from "./EditPostModal";
 
 function PostModal({
   showModal,
   onClose,
   ownPost,
-  DeletePost,
-  postId,
+  deletePost,
+  updatePost,
   changeProfilePic,
   toggleModal1,
   image,
+  setAcivatedPostId,
+  userDetails,
+  caption,
+  postId,
 }) {
-  const [show, toggle, close, open] = useVisibility();
+  const [showDelete, toggleDelete, closeDelete, openDelete] = useVisibility();
+  const [showEdit, toggleEdit, closeEdit, openEdit] = useVisibility();
 
   const handleSetPP = () => {
     onClose();
@@ -24,7 +30,7 @@ function PostModal({
     //close first modal
     toggleModal1();
     ///open delete comfermation modal
-    open();
+    openDelete();
   };
 
   return (
@@ -40,7 +46,13 @@ function PostModal({
                   <p>Delete</p>
                 </div>
 
-                <div className="modalItemContainer">
+                <div
+                  className="modalItemContainer"
+                  onClick={() => {
+                    setAcivatedPostId(userDetails.postId),
+                      onClose(),
+                      openEdit();
+                  }}>
                   <p>Edit</p>
                 </div>
                 <div className="modalItemContainer" onClick={handleSetPP}>
@@ -66,7 +78,7 @@ function PostModal({
         </div>
       </Modal>
       {/* /// Delete comfirmation modal  */}
-      <Modal showModal={show} onClose={close} bgColor="bg-black">
+      <Modal showModal={showDelete} onClose={closeDelete} bgColor="bg-black">
         <div className="modalContainer">
           <div className="flex flex-col items-center pb-7 border-b border-gray-200">
             <Dialog.Title className="title mt-5 font-semibold text-lg">
@@ -81,7 +93,7 @@ function PostModal({
             <div
               className="modalItemContainer text-red-500 font-bold "
               onClick={() => {
-                DeletePost(postId), close();
+                deletePost(userDetails.postId), close();
               }}>
               <p>Delete</p>
             </div>
@@ -91,6 +103,16 @@ function PostModal({
           </div>
         </div>
       </Modal>
+
+      {/* /// Edit modal  */}
+      <EditPostModal
+        show={showEdit}
+        close={closeEdit}
+        userDetails={userDetails}
+        postId={postId}
+        caption={caption}
+        updatePost={updatePost}
+      />
     </>
   );
 }

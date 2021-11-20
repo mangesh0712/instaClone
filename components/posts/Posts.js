@@ -8,6 +8,7 @@ import PostCardSkeleton from "./skeleton/PostCardSkeleton";
 
 function Posts() {
   const usersUid = useSelector((state) => state.auth.user.uid);
+  const [acivatedPostId, setAcivatedPostId] = useState(null);
   const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
 
@@ -43,6 +44,8 @@ function Posts() {
               usersUid={usersUid}
               author={post.data().auther}
               ownPost={post.data().auther === usersUid ? true : false}
+              setAcivatedPostId={setAcivatedPostId}
+              acivatedPostId={acivatedPostId}
             />
           ))}
         </>

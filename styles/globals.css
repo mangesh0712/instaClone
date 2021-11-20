@@ -16,18 +16,22 @@
   }
 
   .commentInput {
-    @apply absolute  bottom-14 left-1 z-50 rounded-md after:w-4 after:h-4 after:absolute after:z-0 after:-bottom-1 after:left-5 after:rotate-45 after:shadow-lg after:border after:bg-white after:border-gray-200;
+    /* @apply absolute  bottom-14 left-1 z-20 rounded-md after:w-4 after:h-4 after:absolute after:z-10 after:-bottom-1 after:left-5 after:rotate-45 after:shadow-lg after:border after:bg-white after:border-gray-200; */
+    @apply absolute  rounded-md;
   }
   .postContainer {
-    @apply my-4 md:my-6 m-2 md:m-0 bg-white border border-gray-200 shadow-sm rounded-sm;
+    @apply my-4 md:my-6 m-2 md:m-0 bg-white border border-gray-300 shadow-sm rounded-sm;
   }
   .storyContainer {
     @apply flex mx-2 md:mx-0 p-6 bg-white mt-8 border border-gray-200 rounded-sm space-x-4;
   }
   .modalContainer {
-    @apply inline-block  overflow-hidden text-left align-bottom sm:align-middle transition-all transform bg-white shadow-xl rounded-lg sm:max-w-sm sm:w-full;
+    @apply inline-block  overflow-hidden text-left mb-10 sm:mb-0 align-bottom sm:align-middle transition-all transform bg-white shadow-xl rounded-lg max-w-sm w-full;
   }
   .modalItemContainer {
     @apply border-b border-gray-300 text-center py-3 text-sm cursor-pointer;
+  }
+  .modalActionButton {
+    @apply inline-flex justify-center bg-red-600 px-4 py-2 text-base font-medium w-full rounded-md text-white shadow-sm border-transparent border focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-red-500 sm:text-sm disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-red-500;
   }
 }

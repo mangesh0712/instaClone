@@ -10,6 +10,7 @@ function EmojiMart({ handleEmoji }) {
       showPreview={false}
       showSkinTones={false}
       onClick={handleEmoji}
+      style={{ borderStyle: "none" }}
     />
   );
 }
