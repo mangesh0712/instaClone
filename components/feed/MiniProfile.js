@@ -1,6 +1,6 @@
 import { signOut } from "next-auth/react";
 import { useDispatch } from "react-redux";
-import { removeUser } from "../../pages/redux/auth/actions";
+import { removeUser } from "../redux/auth/actions";
 import Skeleton from "react-loading-skeleton";
 
 function MiniProfile({ userDetails, showLogOut, containerClass }) {

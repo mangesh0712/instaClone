@@ -12,7 +12,7 @@ import Skeleton from "react-loading-skeleton";
 import { HomeIcon } from "@heroicons/react/solid";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { showPostUploadModal } from "../../pages/redux/posts/postActions";
+import { showPostUploadModal } from "../redux/posts/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "../ProfileDropdown";
 import { useVisibility } from "../../Hooks/useVisibility";
@@ -29,7 +29,7 @@ function Header() {
   return (
     <div className="bg-white border-b border-gray-300  z-10 sticky inset-0 ">
       {/* Left  */}
-      <div className="flex items-center justify-between sm:max-w-xl md:max-w-[610px] lg:max-w-[920px] mx-auto px-2 sm:px-0">
+      <div className="flex items-center justify-between md:max-w-[920px] lg:max-w-[920px] mx-auto px-2 sm:px-0">
         <div
           onClick={() => router.push("/")}
           className="relative hidden lg:inline-grid h-10 w-24 cursor-pointer">
@@ -65,11 +65,11 @@ function Header() {
         </div>
 
         {/* Right  */}
-        <div className="flex items-center space-x-1 md:space-x-4 justify-end relative">
+        <div className="flex items-center space-x-1 sm:space-x-4 justify-end relative">
           <IconWrapper path="/" label="Home" showTootlip={false}>
             <HomeIcon className="navBtn" />
           </IconWrapper>
-          <MenuIcon className="h-6 md:hidden cursor-pointer" />
+          <MenuIcon className="h-6 sm:hidden cursor-pointer" />
           {session ? (
             <>
               <IconWrapper

@@ -8,10 +8,12 @@ import {
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useDispatch } from "react-redux";
-import { removeUser } from "../pages/redux/auth/actions";
+import { removeUser } from "./redux/auth/actions";
+import { useSelector } from "react-redux";
 
 function ProfileDropdown() {
   const dispatch = useDispatch();
+  const uid = useSelector((state) => state.auth.user.uid);
   const onSignOut = () => {
     dispatch(removeUser());
     signOut({
@@ -22,7 +24,7 @@ function ProfileDropdown() {
   return (
     <div className="relative  z-50 h-[203px] w-60 bg-white rounded-md shadow">
       <div className="flex flex-col justify-center text-gray-800">
-        <ProfIcon title="Profile" Icon={UserCircleIcon} path="profile" />
+        <ProfIcon title="Profile" Icon={UserCircleIcon} path={`/${uid}`} />
         <ProfIcon title="Saved" Icon={BookmarkIcon} />
         <ProfIcon title="Settings" Icon={CogIcon} />
         <ProfIcon title="Switch Accounts" Icon={SwitchHorizontalIcon} />

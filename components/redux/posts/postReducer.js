@@ -5,6 +5,7 @@ const initialState = {
   usersPosts: [],
   showModal: false,
   stories: [],
+  selectedPost: null,
 };
 
 export const postsReducer = (state = initialState, { type, payload }) => {
@@ -20,6 +21,9 @@ export const postsReducer = (state = initialState, { type, payload }) => {
 
     case POST_ACTION.SET_USERS_POSTS:
       return { ...state, usersPosts: payload };
+
+    case POST_ACTION.SET_SELECTED_POST:
+      return { ...state, selectedPost: payload };
 
     default:
       return state;

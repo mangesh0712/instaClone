@@ -1,26 +1,28 @@
-import { useSession } from "next-auth/react";
 import React from "react";
-import { useSelector } from "react-redux";
 import { storySize } from "../../constants";
 import Story from "../common/Story";
 import ProfilePosts from "../common/ProfilePosts";
 import Details from "./Details";
 import Footer from "../common/Footer";
+import Skeleton from "react-loading-skeleton";
 
-function ProfileDetails() {
-  const stories = useSelector((state) => state.posts.stories);
+function Profile({ userDetails, stories }) {
   return (
-    <div className="g">
+    <div className="max-w-5xl mx-auto">
       <div className="flex mt-2 md:mt-8">
         <div className="w-1/3  flex justify-center">
-          <img
-            className={`rounded-full cursor-pointer w-40 h-40 object-cover`}
-            src="/images/ney.jpg"
-            alt="xyz"
-          />
+          {!userDetails.userImage ? (
+            <Skeleton circle={true} height={160} width={160} />
+          ) : (
+            <img
+              className={`rounded-full cursor-pointer w-40 h-40 object-cover`}
+              src={`${userDetails?.userImage}`}
+              alt="xyz"
+            />
+          )}
         </div>
         <div className="w-2/3 lg:w-3/3">
-          <Details />
+          <Details {...userDetails} />
         </div>
       </div>
       {/* stories */}
@@ -41,7 +43,7 @@ function ProfileDetails() {
 
       <hr className="mt-6 mb-8 text"></hr>
       {/* posts */}
-      <ProfilePosts />
+      <ProfilePosts uid={userDetails.uid} detailedPostView={false} />
       {/* Footer */}
       <Footer
         containerClass="ml-7 mt-8  w-full text-gray-400 opacity-70"
@@ -52,4 +54,4 @@ function ProfileDetails() {
   );
 }
 
-export default ProfileDetails;
+export default Profile;

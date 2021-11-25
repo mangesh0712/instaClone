@@ -32,8 +32,9 @@ import PopUp from "../common/PopUp";
 import EmojiMart from "../common/EmojiMart";
 import { useVisibility } from "../../Hooks/useVisibility";
 import PostHead from "./PostHead";
-import { addUser } from "../../pages/redux/auth/actions";
-import { useDispatch } from "react-redux";
+import { addUser } from "../redux/auth/actions";
+import { useDispatch, useSelector } from "react-redux";
+import PostIcons from "../common/PostIcons";
 
 function Post({
   id,
@@ -46,15 +47,13 @@ function Post({
   author,
   acivatedPostId,
   setAcivatedPostId,
+  postedTime,
 }) {
   // const usersUid = useSelector((state) => state.auth.user.uid);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  const [likes, setLikes] = useState([]);
-  const [saved, setSaved] = useState([]);
-  const [hasLiked, setHasLiked] = useState(false);
-  const [hasSaved, setHasSaved] = useState(false);
   const { data: session } = useSession();
+  const loggedInUser = useSelector((state) => state.auth.user);
   const [emojiMart, toggleEmojiMart] = useVisibility();
   const dispatch = useDispatch();
 
@@ -73,80 +72,6 @@ function Post({
     };
   }, [db, id]);
 
-  useEffect(
-    () =>
-      onSnapshot(collection(db, "posts", id, "likes"), (snapshot) => {
-        setLikes(snapshot.docs);
-      }),
-    [db, id]
-  );
-
-  useEffect(() => {
-    if (usersUid) {
-      return onSnapshot(
-        collection(db, "users", usersUid, "saved"),
-        (snapshot) => {
-          setSaved(snapshot.docs);
-        }
-      );
-    }
-  }, [db, usersUid]);
-
-  useEffect(
-    () =>
-      setHasLiked(
-        likes.findIndex((like) => like.data().author === usersUid) !== -1
-      ),
-    [likes]
-  );
-
-  useEffect(
-    () =>
-      setHasSaved(
-        saved.findIndex((savedPost) => savedPost.data().postId === id) !== -1
-      ),
-    [saved, id]
-  );
-
-  /// Like Post
-  const likePost = async () => {
-    if (hasLiked) {
-      const q = query(
-        collection(db, "posts", id, "likes"),
-        where("author", "==", usersUid)
-      );
-      ///find the doc with userssUId
-      const snapShot = await getDocs(q);
-      /// delete the doc with id
-      await deleteDoc(doc(db, "posts", id, "likes", snapShot.docs[0].id));
-    } else {
-      await addDoc(collection(db, "posts", id, "likes"), {
-        timeStamp: serverTimestamp(),
-        username: session.user.username,
-        author: usersUid,
-      });
-    }
-  };
-
-  /// Save Post
-  const savePost = async () => {
-    if (hasSaved) {
-      const q = query(
-        collection(db, "users", usersUid, "saved"),
-        where("postId", "==", id)
-      );
-      ///find the doc with postId
-      const snapShot = await getDocs(q);
-      /// delete the doc with id
-      await deleteDoc(doc(db, "users", usersUid, "saved", snapShot.docs[0].id));
-    } else {
-      await addDoc(collection(db, "users", usersUid, "saved"), {
-        postId: id,
-        timeStamp: serverTimestamp(),
-      });
-    }
-  };
-
   /// add comment
   const sendComment = async (e) => {
     e.preventDefault();
@@ -156,9 +81,10 @@ function Post({
 
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session.user.username,
-      userImage: session.user.image,
+      username: loggedInUser.username,
+      userImage: loggedInUser.userImage,
       timestamp: serverTimestamp(),
+      author: loggedInUser.uid,
     });
   };
 
@@ -194,6 +120,7 @@ function Post({
       <PostHead
         userImage={userImage}
         userName={userName}
+        usersUid={usersUid}
         Icon={DotsHorizontalIcon}
         ownPost={ownPost}
         changeProfilePic={changeProfilePic}
@@ -203,8 +130,9 @@ function Post({
         postId={id}
         setAcivatedPostId={setAcivatedPostId}
         caption={caption}
+        author={author}
+        postedTime={postedTime}
       />
-
       {/* Img */}
       <img
         src={img}
@@ -214,49 +142,28 @@ function Post({
 
       {/* buttons */}
       {session && (
-        <div className="flex justify-between pt-4 px-4">
-          <div className="flex items-center space-x-2">
-            {hasLiked ? (
-              <HeartIconFilled
-                className="btn text-red-500"
-                onClick={likePost}
-              />
-            ) : (
-              <HeartIcon onClick={() => likePost()} className="btn" />
-            )}
-            <ChatIcon className="btn" onClick={() => router.push("/")} />
-            <PaperAirplaneIcon className="btn" />
-          </div>
-          {hasSaved ? (
-            <BookmarkIconFilled className="btn text-black" onClick={savePost} />
-          ) : (
-            <BookmarkIcon className="btn" onClick={() => savePost()} />
-          )}
-        </div>
+        <PostIcons
+          postId={id}
+          uid={usersUid}
+          userName={userName}
+          caption={caption}
+          loggedInUser={loggedInUser}
+          showCaption={true}
+        />
       )}
 
-      {/* captions */}
-      <p className="px-5 pt-2 pb-4 truncate">
-        {likes.length > 0 && (
-          <p className="font-bold mb-1">{likes.length} likes</p>
-        )}
-        <span className="font-bold mr-1">{userName}</span>
-        {caption}
-      </p>
-
       {/* comments */}
-
       {comments.length > 0 && (
-        <div className="ml-10 h-20 overflow-y-scroll scrollbar-track-black scrollbar-thin">
+        <div className="ml-5 h-16 overflow-y-scroll  scrollbar-track-black scrollbar-thin">
           {comments.map((comment) => (
-            <div key={comment.id} className="flex items-center space-x-2 mb-3">
-              <img
+            <div key={comment.id} className="flex items-center space-x-2 mb-1">
+              {/* <img
                 src={comment.data().userImage}
                 alt="img"
-                className="h-7 rounded-full"
-              />
+                className="h-7 w-7 rounded-full"
+              /> */}
               <div className="flex-1 text-sm">
-                <span className="font-bold">{comment.data().username}</span>
+                <span className="font-semibold">{comment.data().username}</span>
                 {"   "}
                 <span className="">{comment.data().comment}</span>
               </div>
@@ -267,11 +174,14 @@ function Post({
           ))}
         </div>
       )}
-
+      {/* //timeStamp */}
+      <Moment className="pl-5 text-xs font-thin uppercase" fromNow>
+        {postedTime?.toDate()}
+      </Moment>
       {/* In box */}
       {session && (
         <>
-          <hr className="g" />
+          <hr className="mt-2" />
           <form className="flex items-center px-4 py-2">
             <EmojiHappyIcon
               className="h-6"

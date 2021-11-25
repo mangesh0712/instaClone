@@ -15,12 +15,11 @@ function IconWrapper({ children, path, label, showTootlip, notifications }) {
       onClick={handlePath}
       className={router.pathname === path ? active : "relative"}
       onMouseEnter={() => setHoverState(true)}
-      onMouseLeave={() => setHoverState(false)}
-    >
+      onMouseLeave={() => setHoverState(false)}>
       {children}
       {hoverState && showTootlip && <ToolTip label={label} left="" top="" />}
       {notifications && (
-        <div className="hidden absolute text-xs -top-1 -right-2 bg-red-400 rounded-full animate-bounce w-5 h-5 md:flex items-center  justify-center text-white">
+        <div className="hidden sm:flex absolute text-xs -top-1 -right-2 bg-red-400 rounded-full animate-bounce w-5 h-5  items-center  justify-center text-white">
           3
         </div>
       )}

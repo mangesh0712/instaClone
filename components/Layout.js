@@ -18,7 +18,7 @@ import {
   setUserAddedToDb,
   setUsersUid,
   addUser,
-} from "../pages/redux/auth/actions";
+} from "../components/redux/auth/actions";
 
 function Layout({ children }) {
   const { data: session } = useSession();
