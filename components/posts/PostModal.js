@@ -3,6 +3,9 @@ import Modal from "../common/Modal";
 import { useVisibility } from "../../Hooks/useVisibility";
 import { Dialog } from "@headlessui/react";
 import EditPostModal from "./EditPostModal";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { setSelectedPost } from "../redux/posts/postActions";
 
 function PostModal({
   showModal,
@@ -20,6 +23,8 @@ function PostModal({
 }) {
   const [showDelete, toggleDelete, closeDelete, openDelete] = useVisibility();
   const [showEdit, toggleEdit, closeEdit, openEdit] = useVisibility();
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleSetPP = () => {
     onClose();
@@ -31,6 +36,11 @@ function PostModal({
     toggleModal1();
     ///open delete comfermation modal
     openDelete();
+  };
+
+  const handleGoToPost = () => {
+    dispatch(setSelectedPost({ image, caption, ...userDetails }));
+    router.push(`/post/${postId}`);
   };
 
   return (
@@ -65,7 +75,7 @@ function PostModal({
                 <p>Follow</p>
               </div>
             )}
-            <div className="modalItemContainer">
+            <div className="modalItemContainer" onClick={handleGoToPost}>
               <p>Go To Post</p>
             </div>
             <div className="modalItemContainer">

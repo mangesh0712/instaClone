@@ -11,7 +11,7 @@ import {
   doc,
 } from "@firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
-import { showPostUploadModal } from "../../pages/redux/posts/postActions";
+import { showPostUploadModal } from "../redux/posts/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../common/Modal";
 import { useVisibility } from "../../Hooks/useVisibility";

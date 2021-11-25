@@ -1,6 +1,7 @@
 import React from "react";
 import { useVisibility } from "../../Hooks/useVisibility";
 import PostModal from "./PostModal";
+import Link from "next/link";
 
 function PostHead({
   userImage,
@@ -13,9 +14,13 @@ function PostHead({
   caption,
   updatePost,
   postId,
+  usersUid,
   setAcivatedPostId,
+  author,
+  postedTime,
 }) {
   const [show, toggle, close, open] = useVisibility();
+  console.log(postedTime, "postedTime");
 
   return (
     <>
@@ -27,7 +32,7 @@ function PostHead({
         />
         <div className="flex-grow flex">
           <div className="text-sm font-semibold cursor-pointer hover:underline">
-            {userName}
+            <Link href={`/${author}`}>{userName}</Link>
           </div>
           <div className="flex-grow" />
         </div>
@@ -47,7 +52,10 @@ function PostHead({
         postId={postId}
         userDetails={{
           username: userName,
+          uid: author,
           userImage,
+          postId,
+          timestamp: postedTime,
         }}
       />
     </>

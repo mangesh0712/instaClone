@@ -4,7 +4,7 @@ import Story from "../common/Story";
 import { useSession } from "next-auth/react";
 import { storySize } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { getStories } from "../../pages/redux/posts/postActions";
+import { getStories } from "../redux/posts/postActions";
 import StoriesSkeleton from "./skeleton/StoriesSkeleton";
 
 function Stories({ userDetails }) {

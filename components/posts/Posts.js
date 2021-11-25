@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Post from "./Post";
 import { db } from "../../firebase";
 import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
-import { setAllPosts } from "../../pages/redux/posts/postActions";
+import { setAllPosts } from "../redux/posts/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import PostCardSkeleton from "./skeleton/PostCardSkeleton";
 
@@ -46,6 +46,7 @@ function Posts() {
               ownPost={post.data().auther === usersUid ? true : false}
               setAcivatedPostId={setAcivatedPostId}
               acivatedPostId={acivatedPostId}
+              postedTime={post.data().timestamp}
             />
           ))}
         </>

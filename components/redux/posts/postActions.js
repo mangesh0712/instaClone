@@ -26,3 +26,9 @@ export const setUsersPosts = (posts) => {
     payload: posts,
   };
 };
+export const setSelectedPost = (post) => {
+  return {
+    type: POST_ACTION.SET_SELECTED_POST,
+    payload: post,
+  };
+};
